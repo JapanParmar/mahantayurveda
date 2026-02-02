@@ -18,8 +18,12 @@
         <div class="nav-container">
             <!-- Logo -->
             <div class="logo">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo">
-                <span class="logo-text">Mahant Ayurveda</span>
+                @if(isset($settings['logo']) && $settings['logo'])
+                    <img src="{{ Storage::url($settings['logo']) }}" alt="{{ $settings['site_name'] ?? 'Mahant Ayurveda' }}">
+                @else
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo">
+                @endif
+                <span class="logo-text">{{ $settings['site_name'] ?? 'Mahant Ayurveda' }}</span>
             </div>
             <!-- Desktop Menu -->
             <div class="nav-links">
@@ -31,9 +35,12 @@
             </div>
             <!-- CTA -->
             <div class="nav-actions">
-                <button class="btn btn-primary" style="display: none;">
+                 <a href="{{ route('cart.index') }}" class="btn-icon" style="color: var(--text-heading); margin-right: 1rem;">
+                    <span class="material-symbols-outlined">shopping_bag</span>
+                </a>
+                <!-- <button class="btn btn-primary" style="display: none;">
                     Book Now
-                </button>
+                </button> -->
                 <style>@media(min-width:768px){ .nav-actions button { display: inline-flex !important; } }</style>
                 <!-- Mobile Menu Button -->
                 <button class="mobile-menu-btn">
@@ -43,79 +50,95 @@
         </div>
     </div>
 </nav>
+ <!-- Full Page Scatter Decorations -->
+    <div class="page-decorations">
+        <!-- Hemp Leaves -->
+        <img src="{{ asset('images/leaf1.png') }}" class="scatter-leaf leaf-type-1 pos-1" alt="">
+        <img src="{{ asset('images/leaf1.png') }}" class="scatter-leaf leaf-type-1 pos-2" alt="">
+        <img src="{{ asset('images/leaf1.png') }}" class="scatter-leaf leaf-type-1 pos-3" alt="">
+        <img src="{{ asset('images/leaf1.png') }}" class="scatter-leaf leaf-type-1 pos-4" alt="">
+        
+        <!-- Tulsi Leaves -->
+        <img src="{{ asset('images/leaf2.png') }}" class="scatter-leaf leaf-type-2 pos-5" alt="">
+        <img src="{{ asset('images/leaf2.png') }}" class="scatter-leaf leaf-type-2 pos-6" alt="">
+        <img src="{{ asset('images/leaf2.png') }}" class="scatter-leaf leaf-type-2 pos-7" alt="">
+        <img src="{{ asset('images/leaf2.png') }}" class="scatter-leaf leaf-type-2 pos-8" alt="">
 
+        <!-- Neem Leaves -->
+        <img src="{{ asset('images/leaf3.png') }}" class="scatter-leaf leaf-type-3 pos-9" alt="">
+        <img src="{{ asset('images/leaf3.png') }}" class="scatter-leaf leaf-type-3 pos-10" alt="">
+        <img src="{{ asset('images/leaf3.png') }}" class="scatter-leaf leaf-type-3 pos-11" alt="">
+        <img src="{{ asset('images/leaf3.png') }}" class="scatter-leaf leaf-type-3 pos-12" alt="">
+    </div>
 <!-- Hero Section -->
+@if($hero)
 <section class="hero">
     <!-- Background Image with Overlay -->
     <div class="hero-bg">
         <div class="hero-overlay"></div>
-        <div class="hero-image" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBnTIEo-Nmb2cNaKGS9QZq8AQk7SB33ruKxoMq77exszJRSrfBZWnr1oN1dAuelZ0NdFnS0zeK0CktKaJtciYvn86CAO5bYmHSBZ8g116QcsqiaisebP7oJOSaHi64pzQhIB57YwQUomrk-npA7UjtxRuRg71f6vGUeyD0vW86kSQq3tr1vl5rQuvrYos8CdCBL-OOo6cx36YJeYX5rU6K4hf7IKQruxddgyz4IOSwTCp9xLxJHz1ppXdrCFw9d2n_Z_QC7_zNOZniP');">
+        <div class="hero-image" style="background-image: url('{{ $hero->background_image ? Storage::url($hero->background_image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnTIEo-Nmb2cNaKGS9QZq8AQk7SB33ruKxoMq77exszJRSrfBZWnr1oN1dAuelZ0NdFnS0zeK0CktKaJtciYvn86CAO5bYmHSBZ8g116QcsqiaisebP7oJOSaHi64pzQhIB57YwQUomrk-npA7UjtxRuRg71f6vGUeyD0vW86kSQq3tr1vl5rQuvrYos8CdCBL-OOo6cx36YJeYX5rU6K4hf7IKQruxddgyz4IOSwTCp9xLxJHz1ppXdrCFw9d2n_Z_QC7_zNOZniP' }}');">
         </div>
     </div>
-    <div class="container">
+    
+    <div class="container" style="width: 80%;">
         <div class="hero-content">
-            <span class="hero-badge">Est. 1985</span>
+            @if($hero->badge_text)
+            <span class="hero-badge">{{ $hero->badge_text }}</span>
+            @endif
             <h1 class="hero-title">
-                Heal From Root<br/>No Side Effects
+                {!! $hero->title !!}
             </h1>
             <p class="hero-subtitle">
-                Our mission is to bring pure, natural Ayurveda into everyday life.
-                Every product is made by our Ayurvedic doctor with care, honesty, and 100% natural ingredients — so you get wellness the way nature meant it.
+                {{ $hero->subtitle }}
             </p>
             <div class="hero-actions">
-                <button class="btn btn-primary">
-                    Shop Wellness
-                    <span class="material-symbols-outlined" style="font-size: 1.25rem;">shopping_bag</span>
-                </button>
-                <button class="btn btn-secondary">
-                    Book Consultation
+                @if($hero->button1_text)
+                <a href="{{ $hero->button1_url ?? '#' }}" class="btn btn-outline-light">
+                    {{ $hero->button1_text }}
+                </a>
+                @endif
+                @if($hero->button2_text)
+                <a href="{{ $hero->button2_url ?? '#' }}" class="btn btn-secondary">
+                    {{ $hero->button2_text }}
                     <span class="material-symbols-outlined" style="font-size: 1.25rem;">calendar_month</span>
-                </button>
+                </a>
+                @endif
             </div>
         </div>
     </div>
 </section>
+@endif
 
 <!-- Philosophy Section -->
-<section class="section bg-off-white" id="philosophy">
+<section class="section bg-white" id="philosophy">
     <div class="container">
-        <div class="philosophy-header">
-            <span class="subtitle">Our Philosophy</span>
-            <h3 class="section-title">Our Mission - Your Impact</h3>
-            <p class="card-text" style="font-size: 1.125rem;">
-                Ayurveda is more than just herbs; it is a philosophy of balance, purity, and wisdom that guides us to better living.
-            </p>
-        </div>
-        <div class="grid-3">
-            <!-- Card 1 -->
-            <div class="card group">
-                <div class="icon-wrapper">
-                    <span class="material-symbols-outlined" style="font-size: 1.875rem;">self_improvement</span>
+        <div class="services-container">
+            <!-- Left Side: Content -->
+            <div class="services-content">
+                <div class="philosophy-header">
+                    <!-- <span class="subtitle">Our Philosophy</span> -->
+                    <h3 class="section-title">Our Mission - Your Impact</h3>
+                    <p class="card-text" style="font-size: 1.125rem; font-weight: bold; margin-bottom: 2rem;">
+                        Ayurveda is more than just herbs; it is a philosophy of balance, purity, <br> and wisdom that guides us to better living.
+                    </p>
                 </div>
-                <h4 class="card-title">Balance (Dosha)</h4>
-                <p class="card-text">
-                    Harmonizing the body's natural energies—Vata, Pitta, and Kapha—to create a state of equilibrium and lasting health.
-                </p>
-            </div>
-            <!-- Card 2 -->
-            <div class="card group">
-                <div class="icon-wrapper">
-                    <span class="material-symbols-outlined" style="font-size: 1.875rem;">water_drop</span>
+                <div class="services-grid">
+                    @foreach($philosophyCards as $card)
+                    <!-- Service Item -->
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <!-- Using the image/icon from card -->
+                             <span class="material-symbols-outlined">{{ $card->icon }}</span>
+                            <h4 class="service-title">{{ $card->title }}</h4>
+                        </div>
+                        <div class="service-info">
+                            <!-- Optional: Show description if needed, or just title as per reference -->
+                            <!-- <p class="service-desc">{{ $card->description }}</p> -->
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
-                <h4 class="card-title">Purity (Sattva)</h4>
-                <p class="card-text">
-                    We commit to using only the purest, non-toxic ingredients sourced directly from organic farms in Kerala.
-                </p>
-            </div>
-            <!-- Card 3 -->
-            <div class="card group">
-                <div class="icon-wrapper">
-                    <span class="material-symbols-outlined" style="font-size: 1.875rem;">menu_book</span>
-                </div>
-                <h4 class="card-title">Wisdom (Veda)</h4>
-                <p class="card-text">
-                    Rooted in 5,000 years of ancient knowledge, validated by modern science for holistic well-being.
-                </p>
+                <img src="{{ asset('images/corner-img.png') }}" class="philosophy-corner-img" alt="">
             </div>
         </div>
     </div>
@@ -134,26 +157,35 @@
             </a>
         </div>
         <div class="grid-3">
-            <!-- Product 1 -->
+            @foreach($products as $product)
+            <!-- Product -->
             <div class="product-card">
                 <div class="product-image-wrapper">
-                    <div class="product-image" style="background-image: url('{{ asset('images/products/product1.png') }}');">
+                    <div class="product-image" style="background-image: url('{{ $product->image ? Storage::url($product->image) : asset('images/placeholder.png') }}');">
                     </div>
-                    <div class="badge">Best Seller</div>
+                    @if($product->badge)
+                    <div class="badge">{{ $product->badge }}</div>
+                    @endif
                 </div>
                 <div class="product-details">
                     <div class="product-header">
-                        <h3 class="product-title">AYURVEDIC Chyawanprash 1 kg</h3>
+                        <h3 class="product-title">{{ $product->name }}</h3>
+                        @if($product->rating)
                         <div class="rating">
-                            <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> 4.9
+                            <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> {{ $product->rating }}
                         </div>
+                        @endif
                     </div>
-                    <p class="product-desc">Infused with Bhringraj, Amla, and Coconut milk for strength and shine.</p>
+                    <p class="product-desc">{{ $product->description }}</p>
                     <div class="product-footer">
                         <div class="price-wrapper">
-                            <span class="price-original">₹1,499.00</span>
-                            <span class="price-sale">₹999.00</span>
-                            <span class="price-discount">33% OFF</span>
+                            @if($product->is_on_sale)
+                                <span class="price-original">₹{{ $product->price }}</span>
+                                <span class="price-sale">₹{{ $product->sale_price }}</span>
+                                <span class="price-discount">{{ $product->discount_percentage }}% OFF</span>
+                            @else
+                                <span class="price-sale">₹{{ $product->price }}</span>
+                            @endif
                         </div>
                         <button class="btn-icon">
                             <span class="material-symbols-outlined">add_shopping_cart</span>
@@ -161,124 +193,51 @@
                     </div>
                 </div>
             </div>
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="product-image-wrapper">
-                    <div class="product-image" style="background-image: url('{{ asset('images/products/product2.png') }}');">
-                    </div>
-                </div>
-                <div class="product-details">
-                    <div class="product-header">
-                        <h3 class="product-title">BHRINGRAJ AYURVEDIC HAIR OIL</h3>
-                        <div class="rating">
-                            <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> 4.8
-                        </div>
-                    </div>
-                    <p class="product-desc">Natural stress relief with Brahmi and Ashwagandha to center your thoughts.</p>
-                    <div class="product-footer">
-                        <div class="price-wrapper">
-                            <span class="price-original">₹220.00</span>
-                            <span class="price-sale">₹200.00</span>
-                            <span class="price-discount">9% OFF</span>
-                        </div>
-                        <button class="btn-icon">
-                            <span class="material-symbols-outlined">add_shopping_cart</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="product-image-wrapper">
-                    <div class="product-image" style="background-image: url('{{ asset('images/products/product3.png') }}');">
-                    </div>
-                    <div class="badge">New Arrival</div>
-                </div>
-                <div class="product-details">
-                    <div class="product-header">
-                        <h3 class="product-title">Mahant Ayurvedic Malam</h3>
-                        <div class="rating">
-                            <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> 5.0
-                        </div>
-                    </div>
-                    <p class="product-desc">Restore your inner fire with Ginger, Fennel, and Cumin blend.</p>
-                    <div class="product-footer">
-                        <div class="price-wrapper">
-                            <span class="price-original">₹190.00</span>
-                            <span class="price-sale">₹152.00</span>
-                            <span class="price-discount">20% OFF</span>
-                        </div>
-                        <button class="btn-icon">
-                            <span class="material-symbols-outlined">add_shopping_cart</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="margin-top: 2rem; text-align: center;" class="md:hidden">
+            @endforeach
+</div>
+        <!-- <div style="margin-top: 2rem; text-align: center;" class="md:hidden">
             <button class="btn" style="width: 100%; border: 1px solid #e5e7eb; color: var(--text-main);">
                 View All Products
             </button>
             <style>@media(max-width:767px){ .md\:hidden { display: block; } @media(min-width:768px){ .md\:hidden { display: none; } } }</style>
-        </div>
+        </div> -->
     </div>
 </section>
 
 <!-- Video Stories Section -->
 <section class="section" id="about">
     <div class="container gap-24">
-        <!-- Video Block 1 -->
-        <div class="story-block">
+        @foreach($videoStories as $story)
+        <!-- Video Block -->
+        <div class="story-block {{ $story->is_reversed ? 'reverse' : '' }}">
             <div class="story-content">
                 <div class="story-label">
-                    <span class="story-line"></span> Our Story
+                    <span class="story-line"></span> {{ $story->label }}
                 </div>
                 <h2 class="story-heading">
-                    From Our Garden<br/>To Your Home
+                    {!! $story->heading !!}
                 </h2>
                 <p class="story-text">
-                    We believe that the most potent medicine comes directly from nature. Watch how we cultivate our herbs sustainably in the foothills of the Himalayas, ensuring that every drop of oil and every tablet is charged with nature's vitality.
+                    {{ $story->text }}
                 </p>
-                <button class="link-btn">
-                    Read Our Full Story <span class="material-symbols-outlined" style="font-size: 1rem;">arrow_outward</span>
-                </button>
+                <a href="{{ $story->button_url ?? '#' }}" class="link-btn">
+                    {{ $story->button_text ?? 'Learn More' }} <span class="material-symbols-outlined" style="font-size: 1rem;">arrow_outward</span>
+                </a>
             </div>
             <div class="video-wrapper">
-                <div class="video-thumb" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAvyzVgmUGqDMZ5pZMwlD0x1bs3-JV4xCVa9_g7e93PE9uiZchpnv2hNUTTSgk7oaahIF8wh0bY2Rr9VZ-Yn0SgNez7gmCWwGHXyrYD02vW5fDzrclCYgjgTCGN-k2VVY4KQv-k_NtCjn_IuCqZd7mdt6amY0y6gw_709M_4iCG-mMUvktP9Plw32PGQi94J23epWQvAYwsI2Q9L9l8YIDOBuYAQakfJ3xgwRBSuEnrN3K6XDmmKE8yqmWQjjwbD4Ox3A5qiFWv71cO');">
+                <div class="video-thumb" style="background-image: url('{{ $story->thumbnail ? Storage::url($story->thumbnail) : '' }}');">
                 </div>
                 <div class="play-overlay">
                     <div class="play-btn">
                         <span class="material-symbols-outlined" style="font-size: 2.25rem; color: white;">play_arrow</span>
                     </div>
                 </div>
+                @if($story->video_url)
+                <iframe class="video-iframe" src="{{ $story->video_url }}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display: none; position: absolute; top:0; left:0; width: 100%; height: 100%;"></iframe>
+                @endif
             </div>
         </div>
-        <!-- Video Block 2 -->
-        <div class="story-block reverse">
-            <div class="story-content">
-                <div class="story-label">
-                    <span class="story-line"></span> Rituals
-                </div>
-                <h2 class="story-heading">
-                    The Art of Abhyanga<br/>(Self-Massage)
-                </h2>
-                <p class="story-text">
-                    Daily self-massage is an act of self-love that calms the nervous system and improves circulation. Learn the proper technique from our Ayurvedic experts to get the most out of your Vitality Hair & Body oils.
-                </p>
-                <button class="link-btn">
-                    View All Guides <span class="material-symbols-outlined" style="font-size: 1rem;">arrow_outward</span>
-                </button>
-            </div>
-            <div class="video-wrapper">
-                <div class="video-thumb" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCMhh-4fx9kQxA06rpHmB-u2gbd3JpA-yIPlLPB9W7ZPJM7BwjjribPeVkj7AtnkIyw8CZyLfzB7FWnooTiM8ZJP-JzII9zokAtKrhsCfLrg3Phrx391Czk04TFCf02IovjtWZXlHZSjtOvuViIO7RVMeZ92649rkM6z0TvqawpFbEA0F-l3MB21eB21UePxq5PEi1CzxldfC4uLT0IRqFOEbLnp_f_RV1edBt-R_PLMsjjfnDwyGMNf1WQGu13A9PHv1vOEKjgBH2J');">
-                </div>
-                <div class="play-overlay">
-                    <div class="play-btn">
-                        <span class="material-symbols-outlined" style="font-size: 2.25rem; color: white;">play_arrow</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 </section>
 
@@ -288,69 +247,180 @@
         <h2 class="section-title" style="text-align: center;">
             Healing Stories
         </h2>
-        <div class="grid-3">
-            <!-- Testimonial 1 -->
-            <div class="testimonial-card">
-                <div class="rating" style="margin-bottom: 1rem;">
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                </div>
-                <p class="quote">
-                    "I had severe back pain and digestion issues. After taking Basti therapy, I feel so light and relaxed. It really works from inside. Thank you for such genuine care!"
-                </p>
-                <div class="user-profile">
-                    <div class="avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCE-zZJRMBYAEGwe_llCFOCt-D6U39aKhUyu226pghtcCvkBhpLGsbjULq6k1BRjPlte7E_8rXLxmwnbJlE6apg651Hc-3yWZ7UxHJZgKKHEviwIqE7ixPewSsMzKm061MdP2VSCFi94zcaHjFd2QwFW3ReLChsF1BiVMqfSow_IulDbsmu4oLLM_ab9KwvM3cXw-k5LbjWjw15pNGI7Y1l7hSj19sn-mkZ1khkUIw-gzraJEJyG3oKHVVFfXIU6CIiXlzOxDAc1Tac');"></div>
-                    <div class="user-info">
-                        <p>Harsh Patel, Rajkot</p>
-                        <p>Basti Therapy</p>
+        <div class="testimonial-slider-container">
+            <div class="testimonial-slider">
+                <div class="testimonial-track">
+                    @foreach($testimonials as $testimonial)
+                    <!-- Testimonial Slide -->
+                    <div class="testimonial-slide">
+                        <div class="testimonial-card">
+                            <div class="rating" style="margin-bottom: 1rem;">
+                                @for($i = 0; $i < $testimonial->rating; $i++)
+                                <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
+                                @endfor
+                            </div>
+                            <p class="quote">
+                                "{{ $testimonial->quote }}"
+                            </p>
+                            <div class="user-profile">
+                                @if($testimonial->avatar)
+                                <div class="avatar" style="background-image: url('{{ Storage::url($testimonial->avatar) }}');"></div>
+                                @else
+                                <div class="avatar bg-green-100 flex items-center justify-center font-bold text-green-700">
+                                    {{ substr($testimonial->name, 0, 1) }}
+                                </div>
+                                @endif
+                                <div class="user-info">
+                                    <p>{{ $testimonial->name }}{{ $testimonial->location ? ', ' . $testimonial->location : '' }}</p>
+                                    @if($testimonial->treatment)
+                                    <p>{{ $testimonial->treatment }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    @endforeach
                 </div>
             </div>
-            <!-- Testimonial 2 -->
-            <div class="testimonial-card">
-                <div class="rating" style="margin-bottom: 1rem;">
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                </div>
-                <p class="quote">
-                    "મને કિડનીના પથરીને કારણે દુખાવો થતો હતો. આયુર્વેદિક સારવારથી મને કોઈપણ ઓપરેશન વિના કુદરતી રીતે પથરીને દૂર કરવામાં મદદ મળી. ડૉક્ટર અને આયુર્વેદનો ખૂબ ખૂબ આભાર."
-                </p>
-                <div class="user-profile">
-                    <div class="avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAC6Qrg93rkp2K48aWpcv4An7fv-RLZz4ZXPL38ZGYnB0DclmrAZ8dlWz9sUD0ntx3Zlszam1EI12_3DVdYvp-4zWmh2c8Xt4NxrVfHMlTeue85VKaEMsazl58CPY0ykUMcrPY3hAzkJZPeRFXgIozUFHb6rajcZCLZqqO0Y-S_Io_SrfkygzVfa1wQWRstReeLkOP-nQXObH6LsBDGYwg7J9Xl7HxCnA7KfnHzO4M7bEkL4TLRle4YpxDEUQrYYLF1Otr8S694liTm');"></div>
-                    <div class="user-info">
-                        <p>Jaydeep Parmar, Vadodara</p>
-                        <p>Kidney Stone Treatment</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Testimonial 3 -->
-            <div class="testimonial-card" style="display: none;">
-                <div class="rating" style="margin-bottom: 1rem;">
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star</span>
-                    <span class="material-symbols-outlined" style="font-size: 1rem;">star_half</span>
-                </div>
-                <p class="quote">
-                    "My knee pain made it hard to walk. After regular oil massage and therapy, the pain is almost gone. I can move freely again. Truly natural healing!"
-                </p>
-                <div class="user-profile">
-                    <div class="avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDVa3gDcrthfd7gZuJ57Nzvd6FMTp-Sibh4EFwyCRHm_NBMXBrEcfBlHrr8YyIKiB7y9EPLx_FoGGglkUOVwRPRRkPsApwjLo0lHc7qBzD7SASSPSsmJv3OWBFCqObvYIIykBGNVSs1UoGNt50zme0dtlh0ESUMXMvHI1KAMRe4MMP9E4V5tryhFf2bB-kyY2O8wNIvgiz9wtvJKHzF1BYGiJam2Y815IcSx6b6PMLYEEsPXX7RQSvS5N7mn-4VQ-q39G1xpoUz6nqK');"></div>
-                    <div class="user-info">
-                        <p>Mehul Chauhan, Surat</p>
-                        <p>Knee Pain Treatment</p>
-                    </div>
-                </div>
-            </div>
-            <style>@media(min-width:1024px){ .testimonial-card[style*="display: none"] { display: block !important; } }</style>
+            
+            <!-- Navigation Buttons -->
+            <button class="slider-btn prev-btn" aria-label="Previous slide">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button class="slider-btn next-btn" aria-label="Next slide">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+            
+            <!-- Pagination Dots -->
+            <div class="slider-dots"></div>
         </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const track = document.querySelector('.testimonial-track');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const nextBtn = document.querySelector('.next-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        const dotsContainer = document.querySelector('.slider-dots');
+        
+        if (!track || slides.length === 0) return;
+
+        let currentIndex = 0;
+        let slidesPerView = 3;
+        let autoPlayInterval;
+
+        // Determine slides per view based on window width
+        function updateSlidesPerView() {
+            if (window.innerWidth < 768) {
+                slidesPerView = 1;
+            } else if (window.innerWidth < 1024) {
+                slidesPerView = 2;
+            } else {
+                slidesPerView = 3;
+            }
+            updateSliderPosition();
+            createDots();
+        }
+
+        // Create pagination dots
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            const totalDots = Math.ceil(slides.length / slidesPerView); // Logic depends on scroll behavior, simplifying to 1 dot per group or 1 per slide?
+            // Common carousel UI: 1 dot per slide or 1 dot per "page". 
+            // Let's go with 1 dot per slide for smoother tracking, or limit it if too many.
+            // For simplicity and standard UX with "3 visible", let's make dots correspond to the starting index of the view.
+            
+            const maxIndex = slides.length - slidesPerView;
+            // Only need dots if we have more slides than view
+             if (slides.length <= slidesPerView) return;
+
+            // Simplify: Just dots for every possible start position? Or pages?
+            // Let's do pages for dots to reduce clutter, or just simple index tracking.
+            // Let's do one dot per slide for infinite feel logic, but here let's stick to valid indices.
+            
+            const numberOfDots = slides.length - slidesPerView + 1; // Number of valid starting positions
+
+            for (let i = 0; i < numberOfDots; i++) {
+                const dot = document.createElement('div');
+                dot.classList.add('slider-dot');
+                if (i === currentIndex) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    currentIndex = i;
+                    updateSliderPosition();
+                    resetAutoPlay();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, index) => {
+                if (index === currentIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function updateSliderPosition() {
+            const slideWidth = 100 / slidesPerView;
+            const translateX = -(currentIndex * slideWidth);
+            // track.style.transform = `translateX(${translateX}%)`; // Move by percentage of track width? No.
+            // Percentage of slide width logic:
+            // If track is flex, and inputs are % width.
+            // Move track by - (100 / slidesPerView * currentIndex)%
+            track.style.transform = `translateX(-${currentIndex * (100 / slidesPerView)}%)`;
+            updateDots();
+        }
+
+        function nextSlide() {
+            if (currentIndex < slides.length - slidesPerView) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; // Loop back
+            }
+            updateSliderPosition();
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else {
+                currentIndex = slides.length - slidesPerView; // Loop to end
+            }
+            updateSliderPosition();
+        }
+
+        nextBtn.addEventListener('click', () => {
+            nextSlide();
+            resetAutoPlay();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevSlide();
+            resetAutoPlay();
+        });
+
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide,3000);
+        }
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayInterval);
+            startAutoPlay();
+        }
+
+        window.addEventListener('resize', updateSlidesPerView);
+        
+        // Initial setup
+        updateSlidesPerView();
+        startAutoPlay();
+    });
+</script>
     </div>
 </section>
 
@@ -379,60 +449,88 @@
                 </ul>
             </div>
             <div class="consult-form-card">
-                <form>
+                @if(session('success'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        alert("{{ session('success') }}");
+                    });
+                </script>
+                @endif
+                
+                @if($errors->any())
+                <script>
+                     document.addEventListener('DOMContentLoaded', function() {
+                        let errorMsg = "Booking Failed:\n";
+                        @foreach ($errors->all() as $error)
+                            errorMsg += "- {{ $error }}\n";
+                        @endforeach
+                        alert(errorMsg);
+                    });
+                </script>
+                @endif
+
+                <form action="{{ route('book.appointment') }}" method="POST">
+                    @csrf
                     <div class="form-group">
                         <label class="form-label" for="name">Full Name</label>
-                        <input class="form-input" id="name" placeholder="Enter your name" type="text"/>
+                        <input class="form-input" id="name" name="name" value="{{ old('name') }}" placeholder="Enter your name" type="text" required/>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="phone">Phone Number</label>
-                        <input class="form-input" id="phone" placeholder="Enter your phone number" type="number"/>
+                        <input class="form-input" id="phone" name="phone" value="{{ old('phone') }}" placeholder="Enter your phone number" type="tel" pattern="[0-9]{10}" maxlength="10" title="Please enter exactly 10 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)" required/>
+                        <span style="font-size: 0.75rem; color: #6b7280;">Max 10 digits</span>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="concern">State</label>
-                        <select class="form-input" id="concern">
-                            <option>Select State</option>
-                            <option>Andhra Pradesh</option>
-                            <option>Arunachal Pradesh</option>
-                            <option>Assam</option>
-                            <option>Bihar</option>
-                            <option>Chhattisgarh</option>
-                            <option>Goa</option>
-                            <option>Gujarat</option>
-                            <option>Haryana</option>
-                            <option>Himachal Pradesh</option>
-                            <option>Jammu and Kashmir</option>
-                            <option>Jharkhand</option>
-                            <option>Karnataka</option>
-                            <option>Kerala</option>
-                            <option>Madhya Pradesh</option>
-                            <option>Maharashtra</option>
-                            <option>Manipur</option>
-                            <option>Meghalaya</option>
-                            <option>Mizoram</option>
-                            <option>Nagaland</option>
-                            <option>Odisha</option>
-                            <option>Punjab</option>
-                            <option>Rajasthan</option>
-                            <option>Sikkim</option>
-                            <option>Tamil Nadu</option>
-                            <option>Telangana</option>
-                            <option>Tripura</option>
-                            <option>Uttar Pradesh</option>
-                            <option>Uttarakhand</option>
-                            <option>West Bengal</option>
+                        <select class="form-input" id="concern" name="state" required>
+                            <option value="">Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
                         </select>
                     </div>
                     <!-- district and city -->
-                    <div class="form-group">
-                        <label class="form-label" for="district">District</label>
-                        <input class="form-input" id="district" placeholder="Enter your district" type="text"/>
-                        <label class="form-label" for="city">City</label>
-                        <input class="form-input" id="city" placeholder="Enter your city" type="text"/>
+                    <div class="form-group" style="display: flex; gap: 1rem;">
+                        <div style="flex: 1;">
+                            <label class="form-label" for="district">District</label>
+                            <input class="form-input" id="district" name="district" value="{{ old('district') }}" placeholder="Enter your district" type="text" required>
+                        </div>
+
+                        <div style="flex: 1;">
+                            <label class="form-label" for="city">City</label>
+                            <input class="form-input" id="city" name="city" value="{{ old('city') }}" placeholder="Enter your city" type="text" required>
+                        </div>
                     </div>
 
 
-                    <button class="btn btn-primary" type="button" style="width: 100%;">
+
+                    <button class="btn btn-primary" type="submit" style="width: 100%;">
                         Request Appointment
                     </button>
                     <p style="font-size: 0.75rem; text-align: center; color: #6b7280; margin-top: 1rem;">We respect your privacy. Your information is safe with us.</p>
@@ -446,22 +544,12 @@
  <section class="features">
   <div class="container">
     <div class="features-grid">
+      @foreach($services as $service)
       <div class="feature">
-        <span class="material-symbols-outlined text-primary">verified_user</span>
-        <span>GMP Certified</span>
+        <span class="material-symbols-outlined text-primary">{{ $service->icon }}</span>
+        <span>{{ $service->text }}</span>
       </div>
-      <div class="feature">
-        <span class="material-symbols-outlined text-primary">cruelty_free</span>
-        <span>Cruelty Free</span>
-      </div>
-      <div class="feature">
-        <span class="material-symbols-outlined text-primary">eco</span>
-        <span>100% Natural</span>
-      </div>
-      <div class="feature">
-        <span class="material-symbols-outlined text-primary">recycling</span>
-        <span>Eco Packaging</span>
-      </div>
+      @endforeach
     </div>
   </div>
 </section>
@@ -476,9 +564,10 @@
                 <p class="card-text">Experience authentic ayurveda at our center.</p>
             </div>
         </div>
+        @if(isset($settings['map_embed_url']) && $settings['map_embed_url'])
         <div class="map-container" style="border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); height: 400px; width: 100%;">
             <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d118147.68202062486!2d70.73889449339906!3d22.27363076864619!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3959c98ac71cdf0f%3A0x76dd15cfbe93ad3b!2sRajkot%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1705680000000!5m2!1sen!2sin" 
+                src="{{ $settings['map_embed_url'] }}" 
                 width="100%" 
                 height="100%" 
                 style="border:0;" 
@@ -487,10 +576,11 @@
                 referrerpolicy="no-referrer-when-downgrade">
             </iframe>
         </div>
+        @endif
         <div style="text-align: center; margin-top: 2rem;">
-            <h4 style="font-size: 1.25rem; font-weight: 600; color: var(--text-heading);">Mahant Ayurveda Clinic</h4>
-            <p style="color: var(--text-body); margin-top: 0.5rem;">123 Wellness Street, Near Royal Park, Rajkot, Gujarat - 360001</p>
-            <p style="color: var(--text-body); margin-top: 0.5rem;">Daily: 9:00 AM - 8:00 PM</p>
+            <h4 style="font-size: 1.25rem; font-weight: 600; color: var(--text-heading);">{{ $settings['clinic_name'] ?? 'Mahant Ayurveda Clinic' }}</h4>
+            <p style="color: var(--text-body); margin-top: 0.5rem;">{{ $settings['address'] ?? '123 Wellness Street, Rajkot, Gujarat' }}</p>
+            <p style="color: var(--text-body); margin-top: 0.5rem;">{{ $settings['clinic_hours'] ?? 'Daily: 9:00 AM - 8:00 PM' }}</p>
         </div>
     </div>
 </section>
@@ -505,12 +595,18 @@
                     <span class="logo-text">Mahant Ayurveda</span>
                 </div>
                 <p style="color: #9ca3af; font-size: 0.875rem; line-height: 1.6; margin-bottom: 1.5rem;">
-                    Bridging the gap between ancient wisdom and modern living. Bringing balance to your life through the power of Ayurveda.
+                    {{ $settings['footer_text'] ?? 'Bridging the gap between ancient wisdom and modern living. Bringing balance to your life through the power of Ayurveda.' }}
                 </p>
                 <div class="social-links">
-                    <a class="social-icon" href="#"><span style="font-size: 0.75rem; font-weight: 700;">IG</span></a>
-                    <a class="social-icon" href="#"><span style="font-size: 0.75rem; font-weight: 700;">FB</span></a>
-                    <a class="social-icon" href="#"><span style="font-size: 0.75rem; font-weight: 700;">YT</span></a>
+                    @if(isset($settings['instagram_url']) && $settings['instagram_url'])
+                    <a class="social-icon" href="{{ $settings['instagram_url'] }}" target="_blank"><span style="font-size: 0.75rem; font-weight: 700;">IG</span></a>
+                    @endif
+                    @if(isset($settings['facebook_url']) && $settings['facebook_url'])
+                    <a class="social-icon" href="{{ $settings['facebook_url'] }}" target="_blank"><span style="font-size: 0.75rem; font-weight: 700;">FB</span></a>
+                    @endif
+                    @if(isset($settings['youtube_url']) && $settings['youtube_url'])
+                    <a class="social-icon" href="{{ $settings['youtube_url'] }}" target="_blank"><span style="font-size: 0.75rem; font-weight: 700;">YT</span></a>
+                    @endif
                 </div>
             </div>
             <div class="footer-section">
@@ -520,8 +616,8 @@
 
                 <h4>Contact Us</h4>
                 <ul class="footer-links">
-                    <li>9265341378</li>
-                    <li>mahantayurveda@gmail.com</li>
+                    <li>{{ $settings['phone'] ?? '+91 9265341378' }}</li>
+                    <li>{{ $settings['email'] ?? 'mahantayurveda@gmail.com' }}</li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -567,6 +663,23 @@
                     icon.textContent = navLinks.classList.contains('active') ? 'close' : 'menu';
                 }
             });
+        }
+
+
+        // Navbar Scroll Effect
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            // Initial check
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            }
         }
 
         // Scroll Reveal
