@@ -94,7 +94,7 @@
                         <span id="checkout-shipping">
                             @php
                                 $subtotal = $cart->items->sum(function($item) { return $item->price * $item->quantity; });
-                                $shipping = $subtotal > 999 ? 0 : 50;
+                                $shipping = $subtotal > env('FREE_SHIPPING_THRESHOLD') ? 0 : env('SHIPPING_CHARGE');
                             @endphp
                             ₹{{ $shipping }}
                         </span>
@@ -319,12 +319,8 @@
                 document.getElementById('total-' + itemId).innerText = '₹' + data.item_total;
                 document.getElementById('checkout-subtotal').innerText = '₹' + data.subtotal;
                 
-                // Recalculate shipping and total locally or get from server (simplifying local for now based on rules)
-                let shipping = data.subtotal > 999 ? 0 : 50;
-                let total = data.subtotal + shipping;
-                
-                document.getElementById('checkout-shipping').innerText = '₹' + shipping;
-                document.getElementById('checkout-total').innerText = '₹' + total;
+                document.getElementById('checkout-shipping').innerText = '₹' + data.shipping;
+                document.getElementById('checkout-total').innerText = '₹' + data.total;
             }
         })
         .catch(console.error);

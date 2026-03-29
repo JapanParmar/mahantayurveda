@@ -18,7 +18,7 @@ class LandingController extends Controller
         $data = [
             'hero' => HeroSection::first(),
             'philosophyCards' => PhilosophyCard::active()->get(),
-            'products' => Product::active()->take(3)->get(),
+            'products' => Product::active()->get(),
             'videoStories' => VideoStory::active()->get(),
             'testimonials' => Testimonial::active()->get(),
             'services' => TrustIndicator::active()->get(),

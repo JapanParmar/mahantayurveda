@@ -8,7 +8,8 @@
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('css/landing.css') }}"> -->
+    <link rel="stylesheet" href="/css/landing.css">
     @yield('styles')
     <style>
         /* Scoped styles for inner pages if needed */
@@ -21,7 +22,7 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar scanned-nav">
+<nav class="navbar scanned-nav scrolled">
     <div class="container">
         <div class="nav-container">
             <!-- Logo -->
@@ -145,19 +146,19 @@
         }
 
         // Navbar Scroll Effect
-        const navbar = document.querySelector('.navbar');
-        if (navbar) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 20) {
-                    navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
-                }
-            });
-            if (window.scrollY > 20) {
-                navbar.classList.add('scrolled');
-            }
-        }
+        // const navbar = document.querySelector('.navbar');
+        // if (navbar) {
+        //     window.addEventListener('scroll', () => {
+        //         if (window.scrollY > 20) {
+        //             navbar.classList.add('scrolled');
+        //         } else {
+        //             navbar.classList.remove('scrolled');
+        //         }
+        //     });
+        //     if (window.scrollY > 20) {
+        //         navbar.classList.add('scrolled');
+        //     }
+        // }
     });
 </script>
 @yield('scripts')

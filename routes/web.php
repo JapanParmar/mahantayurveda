@@ -43,6 +43,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::resource('philosophy', PhilosophyCardController::class);
     Route::resource('trust-indicators', TrustIndicatorController::class);
     
+    // Order Management
+    Route::get('orders', [\App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders.index');
+    Route::get('orders/{id}', [\App\Http\Controllers\Admin\OrderController::class, 'show'])->name('orders.show');
+    Route::post('orders/{id}/status', [\App\Http\Controllers\Admin\OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::post('orders/{id}/tracking', [\App\Http\Controllers\Admin\OrderController::class, 'updateTracking'])->name('orders.updateTracking');
+    Route::get('orders/export/csv', [\App\Http\Controllers\Admin\OrderController::class, 'export'])->name('orders.export');
+    
+    // Booking Management
+    Route::get('bookings', [\App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
+    Route::post('bookings/{id}/status', [\App\Http\Controllers\Admin\BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+    
     Route::get('hero', [HeroController::class, 'edit'])->name('hero.edit');
     Route::put('hero', [HeroController::class, 'update'])->name('hero.update');
     

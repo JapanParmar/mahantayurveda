@@ -155,8 +155,8 @@ img {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     transition: all 0.3s ease;
-    /* color: var(--white); */
-    color: var(--text-main); 
+    color: var(--white);
+    /* color: var(--text-main);  */
 }
 
 .navbar.scrolled {
@@ -221,6 +221,7 @@ img {
 
 .nav-links {
     display: none;
+    align-items: center;
 }
 
 .nav-actions {
@@ -335,6 +336,9 @@ img {
 @media (max-width: 768px) {
     .scatter-leaf { opacity: 0.08; } /* Fainter on mobile */
     .pos-2, .pos-12 { display: none; } /* Hide big ones on edge */
+    .services-content img{
+        display: none;
+    }
 }
 
 /* Ensure content sits ABOVE decorations */
@@ -911,6 +915,7 @@ img {
     align-items: center;
     justify-content: center;
     transition: background 0.3s;
+    cursor: pointer;
 }
 
 .video-wrapper:hover .play-overlay {
@@ -1209,6 +1214,7 @@ footer {
     border-bottom: 1px solid rgba(0,0,0,0.1);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     animation: slideDown 0.3s ease-out;
+    height: 100vh;
 }
 
 @keyframes slideDown {
@@ -1226,6 +1232,58 @@ footer {
 .reveal-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Product Slider Styles */
+.product-slider-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.product-slider {
+    overflow: hidden;
+    width: 100%;
+    padding: 1rem 0 3rem 0;
+}
+
+.product-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
+
+.product-slide {
+    flex-shrink: 0;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+    .product-slide {
+        width: 50%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .product-slide {
+        width: 33.333%;
+    }
+}
+
+.product-slide .product-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-prev-btn {
+    left: -1rem;
+}
+
+.product-next-btn {
+    right: -1rem;
 }
 
 /* Testimonial Slider Styles */

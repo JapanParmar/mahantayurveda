@@ -12,5 +12,6 @@ class Booking extends Model
         'state',
         'district',
         'city',
+        'status',
     ];
 }

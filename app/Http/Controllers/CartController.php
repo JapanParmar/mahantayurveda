@@ -80,10 +80,14 @@ class CartController extends Controller
              return $item->price * $item->quantity;
         });
 
+        $shipping = $subtotal > env('FREE_SHIPPING_THRESHOLD') ? 0 : env('SHIPPING_CHARGE'); // Simple shipping logic
+        $total = $subtotal + $shipping;
         return response()->json([
             'success' => true, 
             'subtotal' => $subtotal,
-            'item_total' => $cartItem->price * $cartItem->quantity
+            'item_total' => $cartItem->price * $cartItem->quantity,
+            'shipping' => $shipping,
+            'total' => $total
         ]);
     }
 

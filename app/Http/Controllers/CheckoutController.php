@@ -58,7 +58,7 @@ class CheckoutController extends Controller
              return $item->price * $item->quantity;
         });
         
-        $shipping = $subtotal > 999 ? 0 : 90; // Simple shipping logic
+        $shipping = $subtotal > env('FREE_SHIPPING_THRESHOLD') ? 0 : env('SHIPPING_CHARGE'); // Simple shipping logic
         $total = $subtotal + $shipping;
 
         // Create Order

@@ -78,6 +78,18 @@
                     Trust Badges
                 </a>
 
+                <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">E-Commerce</div>
+
+                <a href="{{ route('admin.orders.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-700 rounded-lg {{ request()->routeIs('admin.orders*') ? 'bg-green-50 text-green-700 font-medium' : '' }}">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    Orders
+                </a>
+
+                <a href="{{ route('admin.bookings.index') }}" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-700 rounded-lg {{ request()->routeIs('admin.bookings*') ? 'bg-green-50 text-green-700 font-medium' : '' }}">
+                    <span class="material-symbols-outlined">event</span>
+                    Bookings
+                </a>
+
                 <div class="pt-4 pb-2 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">System</div>
 
                 <a href="{{ route('admin.settings.edit') }}" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-green-50 hover:text-green-700 rounded-lg {{ request()->routeIs('admin.settings*') ? 'bg-green-50 text-green-700 font-medium' : '' }}">

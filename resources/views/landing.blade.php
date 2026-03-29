@@ -41,7 +41,7 @@
                 <!-- <button class="btn btn-primary" style="display: none;">
                     Book Now
                 </button> -->
-                <style>@media(min-width:768px){ .nav-actions button { display: inline-flex !important; } }</style>
+                <style>@media(max-width:768px){ .nav-actions button { display: inline-flex !important; } }</style>
                 <!-- Mobile Menu Button -->
                 <button class="mobile-menu-btn">
                     <span class="material-symbols-outlined">menu</span>
@@ -152,49 +152,192 @@
                 <h2 class="section-title">Editorial Collection</h2>
                 <p class="card-text">Curated essentials for your daily ritual.</p>
             </div>
-            <a class="view-all" href="#">
+            <a class="view-all" href="{{ route('products.index') }}">
                 View All Products <span class="material-symbols-outlined" style="font-size: 1.25rem;">arrow_forward</span>
             </a>
         </div>
-        <div class="grid-3">
-            @foreach($products as $product)
-            <!-- Product -->
-            <div class="product-card">
-                <div class="product-image-wrapper">
-                    <div class="product-image" style="background-image: url('{{ $product->image ? Storage::url($product->image) : asset('images/placeholder.png') }}');">
+        <div class="product-slider-container">
+            <div class="product-slider">
+                <div class="product-track">
+                    @foreach($products as $product)
+                    <!-- Product Slide -->
+                    <div class="product-slide">
+                        <a href="{{ route('products.show', $product->id) }}" style="text-decoration: none; color: inherit; display: block; height: 100%;">
+                            <div class="product-card">
+                                <div class="product-image-wrapper">
+                                    <div class="product-image" style="background-image: url('{{ $product->image ? Storage::url($product->image) : asset('images/placeholder.png') }}');">
+                                    </div>
+                                    @if($product->badge)
+                                    <div class="badge">{{ $product->badge }}</div>
+                                    @endif
+                                </div>
+                                <div class="product-details">
+                                    <div class="product-header">
+                                        <h3 class="product-title">{{ $product->name }}</h3>
+                                        @if($product->rating)
+                                        <div class="rating">
+                                            <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> {{ $product->rating }}
+                                        </div>
+                                        @endif
+                                    </div>
+                                    <p class="product-desc">{{ $product->description }}</p>
+                                    <div class="product-footer">
+                                        <div class="price-wrapper">
+                                            @if($product->is_on_sale)
+                                                <span class="price-original">₹{{ $product->price }}</span>
+                                                <span class="price-sale">₹{{ $product->sale_price }}</span>
+                                                <span class="price-discount">{{ $product->discount_percentage }}% OFF</span>
+                                            @else
+                                                <span class="price-sale">₹{{ $product->price }}</span>
+                                            @endif
+                                        </div>
+                                        <button class="btn-icon">
+                                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    @if($product->badge)
-                    <div class="badge">{{ $product->badge }}</div>
-                    @endif
-                </div>
-                <div class="product-details">
-                    <div class="product-header">
-                        <h3 class="product-title">{{ $product->name }}</h3>
-                        @if($product->rating)
-                        <div class="rating">
-                            <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> {{ $product->rating }}
-                        </div>
-                        @endif
-                    </div>
-                    <p class="product-desc">{{ $product->description }}</p>
-                    <div class="product-footer">
-                        <div class="price-wrapper">
-                            @if($product->is_on_sale)
-                                <span class="price-original">₹{{ $product->price }}</span>
-                                <span class="price-sale">₹{{ $product->sale_price }}</span>
-                                <span class="price-discount">{{ $product->discount_percentage }}% OFF</span>
-                            @else
-                                <span class="price-sale">₹{{ $product->price }}</span>
-                            @endif
-                        </div>
-                        <button class="btn-icon">
-                            <span class="material-symbols-outlined">add_shopping_cart</span>
-                        </button>
-                    </div>
+                    @endforeach
                 </div>
             </div>
-            @endforeach
-</div>
+            
+            <!-- Navigation Buttons -->
+            <button class="slider-btn product-prev-btn" aria-label="Previous slide">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button class="slider-btn product-next-btn" aria-label="Next slide">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+            
+            <!-- Pagination Dots -->
+            <div class="slider-dots product-slider-dots"></div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const track = document.querySelector('.product-track');
+                const slides = document.querySelectorAll('.product-slide');
+                const nextBtn = document.querySelector('.product-next-btn');
+                const prevBtn = document.querySelector('.product-prev-btn');
+                const dotsContainer = document.querySelector('.product-slider-dots');
+                
+                if (!track || slides.length === 0) return;
+
+                let currentIndex = 0;
+                let slidesPerView = 3;
+                let autoPlayInterval;
+
+                // Determine slides per view based on window width
+                function updateSlidesPerView() {
+                    if (window.innerWidth < 768) {
+                        slidesPerView = 1;
+                    } else if (window.innerWidth < 1024) {
+                        slidesPerView = 2;
+                    } else {
+                        slidesPerView = 3;
+                    }
+                    updateSliderPosition();
+                    createDots();
+                }
+
+                // Create pagination dots
+                function createDots() {
+                    dotsContainer.innerHTML = '';
+                    
+                    // Only show dots if we have more than slidesPerView
+                    if (slides.length <= slidesPerView) {
+                        dotsContainer.style.display = 'none';
+                        if (nextBtn) nextBtn.style.display = 'none';
+                        if (prevBtn) prevBtn.style.display = 'none';
+                        return;
+                    }
+                    
+                    dotsContainer.style.display = 'flex';
+                    if (nextBtn) nextBtn.style.display = 'flex';
+                    if (prevBtn) prevBtn.style.display = 'flex';
+                    
+                    const numberOfDots = slides.length - slidesPerView + 1;
+
+                    for (let i = 0; i < numberOfDots; i++) {
+                        const dot = document.createElement('div');
+                        dot.classList.add('slider-dot');
+                        if (i === currentIndex) dot.classList.add('active');
+                        dot.addEventListener('click', () => {
+                            currentIndex = i;
+                            updateSliderPosition();
+                            resetAutoPlay();
+                        });
+                        dotsContainer.appendChild(dot);
+                    }
+                }
+
+                function updateDots() {
+                    const dots = document.querySelectorAll('.product-slider-dots .slider-dot');
+                    dots.forEach((dot, index) => {
+                        if (index === currentIndex) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+                }
+
+                function updateSliderPosition() {
+                    const slideWidth = 100 / slidesPerView;
+                    track.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+                    updateDots();
+                }
+
+                function nextSlide() {
+                    if (currentIndex < slides.length - slidesPerView) {
+                        currentIndex++;
+                    } else {
+                        currentIndex = 0;
+                    }
+                    updateSliderPosition();
+                }
+
+                function prevSlide() {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                    } else {
+                        currentIndex = slides.length - slidesPerView;
+                    }
+                    updateSliderPosition();
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        nextSlide();
+                        resetAutoPlay();
+                    });
+                }
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        prevSlide();
+                        resetAutoPlay();
+                    });
+                }
+
+                function startAutoPlay() {
+                    autoPlayInterval = setInterval(nextSlide, 3000);
+                }
+
+                function resetAutoPlay() {
+                    clearInterval(autoPlayInterval);
+                    startAutoPlay();
+                }
+
+                window.addEventListener('resize', updateSlidesPerView);
+                
+                // Initial setup
+                updateSlidesPerView();
+                startAutoPlay();
+            });
+        </script>
         <!-- <div style="margin-top: 2rem; text-align: center;" class="md:hidden">
             <button class="btn" style="width: 100%; border: 1px solid #e5e7eb; color: var(--text-main);">
                 View All Products
@@ -233,7 +376,14 @@
                     </div>
                 </div>
                 @if($story->video_url)
-                <iframe class="video-iframe" src="{{ $story->video_url }}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display: none; position: absolute; top:0; left:0; width: 100%; height: 100%;"></iframe>
+                    <!-- External video (YouTube/Vimeo) -->
+                    <iframe class="video-iframe" src="{{ $story->video_url }}" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="display: none; position: absolute; top:0; left:0; width: 100%; height: 100%;"></iframe>
+                @elseif($story->video_path)
+                    <!-- Local video file -->
+                    <video class="video-player" style="display: none; position: absolute; top:0; left:0; width: 100%; height: 100%; object-fit: cover;" controls>
+                        <source src="{{ Storage::url($story->video_path) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 @endif
             </div>
         </div>
@@ -669,18 +819,18 @@
         // Navbar Scroll Effect
         const navbar = document.querySelector('.navbar');
         if (navbar) {
-            window.addEventListener('scroll', () => {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 20) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                });
+            // Initial check
                 if (window.scrollY > 20) {
                     navbar.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('scrolled');
                 }
-            });
-            // Initial check
-            if (window.scrollY > 20) {
-                navbar.classList.add('scrolled');
             }
-        }
 
         // Scroll Reveal
         const observer = new IntersectionObserver((entries) => {
@@ -696,6 +846,68 @@
         revealElements.forEach((el) => {
             el.classList.add('reveal-up');
             observer.observe(el);
+        });
+
+        // Video Play Functionality
+        const playButtons = document.querySelectorAll('.play-overlay');
+        
+        playButtons.forEach((playBtn, index) => {
+            playBtn.addEventListener('click', function() {
+                const videoWrapper = this.parentElement;
+                const iframe = videoWrapper.querySelector('.video-iframe');
+                const videoPlayer = videoWrapper.querySelector('.video-player');
+                const thumbnail = videoWrapper.querySelector('.video-thumb');
+                
+                // Hide thumbnail and play button
+                if (thumbnail) thumbnail.style.display = 'none';
+                this.style.display = 'none';
+                
+                if (iframe) {
+                    // Handle external video (YouTube/Vimeo)
+                    
+                    // Show iframe
+                    iframe.style.display = 'block';
+                    
+                    // Get the current source
+                    let src = iframe.src;
+                    
+                    // Convert regular YouTube URL to embed URL if needed
+                    if (src.includes('youtube.com/watch')) {
+                        const videoId = new URL(src).searchParams.get('v');
+                        if (videoId) {
+                            src = `https://www.youtube.com/embed/${videoId}`;
+                        }
+                    } else if (src.includes('youtu.be/')) {
+                        const videoId = src.split('youtu.be/')[1].split('?')[0];
+                        src = `https://www.youtube.com/embed/${videoId}`;
+                    }
+                    
+                    // Convert regular Vimeo URL to embed URL if needed
+                    if (src.includes('vimeo.com/') && !src.includes('/video/')) {
+                        const videoId = src.split('vimeo.com/')[1].split('?')[0];
+                        src = `https://player.vimeo.com/video/${videoId}`;
+                    }
+                    
+                    // Add autoplay parameter
+                    const separator = src.includes('?') ? '&' : '?';
+                    src = src + separator + 'autoplay=1';
+                    
+                    // Update iframe source to trigger autoplay
+                    iframe.src = src;
+                } else if (videoPlayer) {
+                    // Handle local video file (HTML5 video)
+                    
+                    // Show video player
+                    videoPlayer.style.display = 'block';
+                    
+                    // Play the video
+                    videoPlayer.play().catch(err => {
+                        console.error('Error playing video:', err);
+                    });
+                } else {
+                    console.error('No iframe or video player found in video wrapper');
+                }
+            });
         });
     });
 </script>

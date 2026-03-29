@@ -323,7 +323,7 @@
     /* Actions */
     .purchase-actions {
         display: flex;
-        flex-direction: column;
+        /* flex-direction: column; */
         gap: 0.75rem;
         background: #f8fafc;
         padding: 1.25rem;
