@@ -3,17 +3,18 @@
 @section('title', 'Shopping Cart')
 
 @section('content')
-<section class="section bg-light" style="min-height: 80vh; padding-top: 4rem;">
+<section class="section" style="min-height: 80vh; padding-top: 2rem;">
     <div class="container">
         <div class="header-group" style="margin-bottom: 3rem; text-align: center;">
-            <h1 class="section-title" style="font-size: 3rem; margin-bottom: 0.5rem;">Your Daily Rituals</h1>
-            <p class="text-muted" style="font-size: 1.125rem;">Review your selection of holistic wellness.</p>
+            <span class="section-label" style="justify-content: center;">Your Cart</span>
+            <h1 class="section-title" style="margin-bottom: 0.5rem;">Your Daily <em>Rituals</em></h1>
+            <p class="section-text" style="margin: 0 auto;">Review your selection of holistic wellness.</p>
         </div>
 
         @if($items->count() > 0)
         <div class="cart-layout">
             <!-- Cart Items List -->
-            <div class="cart-container bg-white shadow-sm">
+            <div class="cart-container">
                 <!-- Desktop Header -->
                 <div class="cart-header">
                     <span class="header-label">Product</span>
@@ -41,13 +42,9 @@
                         
                         <div class="item-quantity">
                              <div class="quantity-pill">
-                                <button type="button" class="qty-btn" onclick="updateQty({{ $item->id }}, -1)">
-                                    <span class="material-symbols-outlined">remove</span>
-                                </button>
+                                <button type="button" class="qty-btn" onclick="updateQty({{ $item->id }}, -1)">−</button>
                                 <input type="number" id="qty-{{ $item->id }}" value="{{ $item->quantity }}" readonly>
-                                <button type="button" class="qty-btn" onclick="updateQty({{ $item->id }}, 1)">
-                                    <span class="material-symbols-outlined">add</span>
-                                </button>
+                                <button type="button" class="qty-btn" onclick="updateQty({{ $item->id }}, 1)">+</button>
                             </div>
                         </div>
                         
@@ -73,7 +70,7 @@
 
             <!-- Summary Sidebar -->
             <div class="cart-sidebar">
-                <div class="summary-card bg-white shadow-sm">
+                <div class="summary-card">
                     <h3 class="summary-title">Order Summary</h3>
                     
                     <div class="summary-rows">
@@ -95,22 +92,19 @@
                     </div>
                     
                     <div class="summary-actions">
-                         <a href="{{ route('checkout.index') }}" class="btn btn-primary btn-block btn-lg">
+                         <a href="{{ route('checkout.index') }}" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
                             Proceed to Checkout
                         </a>
-                        <!-- <p class="secure-text">
-                            <span class="material-symbols-outlined" style="font-size: 1rem;">lock</span> Secure Checkout
-                        </p> -->
                     </div>
                 </div>
                 
-                <div class="trust-badges">
-                    <div class="badge-item">
-                        <span class="material-symbols-outlined">local_shipping</span>
+                <div class="trust-badges" style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div class="badge-item" style="display: flex; align-items: center; gap: 0.75rem; background: rgba(255,255,255,0.03); padding: 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: var(--text-body); font-size: 0.85rem;">
+                        <span class="material-symbols-outlined" style="color: var(--accent);">local_shipping</span>
                         <span>Free shipping over ₹999</span>
                     </div>
-                    <div class="badge-item">
-                        <span class="material-symbols-outlined">verified_user</span>
+                    <div class="badge-item" style="display: flex; align-items: center; gap: 0.75rem; background: rgba(255,255,255,0.03); padding: 0.75rem; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: var(--text-body); font-size: 0.85rem;">
+                        <span class="material-symbols-outlined" style="color: var(--accent);">verified_user</span>
                         <span>Official Guarantee</span>
                     </div>
                 </div>
@@ -123,7 +117,7 @@
             </div>
             <h2 class="empty-title">Your cart is feeling light</h2>
             <p class="empty-text">Explore our collection of natural remedies to find your balance.</p>
-            <a href="{{ route('products.index') }}" class="btn btn-primary btn-lg">
+            <a href="{{ route('products.index') }}" class="btn btn-primary" style="padding: 1rem 2rem;">
                 Explore The Collection
             </a>
         </div>
@@ -131,344 +125,69 @@
     </div>
 </section>
 
+@endsection
+
+@section('styles')
 <style>
-    /* Styling Variables locally to ensure premium feel */
-    :root {
-        --c-border: #e5e7eb;
-        --c-text-main: #1f2937;
-        --c-text-muted: #6b7280;
-        --c-bg-light: #f9fafb;
-    }
-
-    .bg-light { background-color: #f8f8f6; } /* Custom soft sand color */
-    .bg-white { background-color: #ffffff; }
-    .shadow-sm { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03); }
+    .cart-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+    @media(min-width: 1024px) { .cart-layout { grid-template-columns: 2fr 1fr; gap: 3rem; } }
     
-    .cart-layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        align-items: start;
-    }
-    
-    @media(min-width: 1024px) {
-        .cart-layout {
-            grid-template-columns: 2fr 1fr;
-            gap: 3rem;
-        }
-    }
+    .cart-container { background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); overflow: hidden; backdrop-filter: blur(10px); }
+    .cart-header { display: none; grid-template-columns: 5fr 2fr 2fr 1fr; padding: 1rem 2rem; background: rgba(0,0,0,0.2); border-bottom: 1px solid var(--border-subtle); font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; }
+    @media(min-width: 768px) { .cart-header { display: grid; } }
 
-    /* Cart Container */
-    .cart-container {
-        border-radius: 1rem;
-        border: 1px solid var(--c-border);
-        overflow: hidden;
-    }
+    .cart-item { display: grid; grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem; border-bottom: 1px solid var(--border-subtle); align-items: center; position: relative; }
+    @media(min-width: 768px) { .cart-item { grid-template-columns: 5fr 2fr 2fr 1fr; padding: 1.5rem 2rem; gap: 1rem; } }
 
-    .cart-header {
-        display: none; /* Hidden on mobile */
-        grid-template-columns: 5fr 2fr 2fr 1fr; /* Adjusted ratios */
-        padding: 1.5rem 2rem;
-        background-color: #fafafa;
-        border-bottom: 1px solid var(--c-border);
-        font-weight: 600;
-        color: var(--c-text-muted);
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-    
-    @media(min-width: 768px) {
-        .cart-header { display: grid; }
-    }
+    .item-product { display: flex; gap: 1.5rem; align-items: center; }
+    .item-image-wrapper { width: 90px; height: 90px; flex-shrink: 0; border-radius: var(--radius-sm); overflow: hidden; background: rgba(0,0,0,0.2); border: 1px solid var(--border-subtle); }
+    .item-image { width: 100%; height: 100%; object-fit: cover; }
+    .item-details { display: flex; flex-direction: column; gap: 0.25rem; }
+    .item-title { font-family: var(--font-heading); font-size: 1.25rem; font-weight: 500; color: var(--text-heading); transition: color 0.2s; }
+    .item-title-link:hover .item-title { color: var(--accent); }
+    .item-price-single { color: var(--text-muted); font-size: 0.9rem; }
 
-    .cart-item {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 2rem;
-        border-bottom: 1px solid var(--c-border);
-        align-items: center;
-        position: relative;
-    }
+    .quantity-pill { display: inline-flex; align-items: center; background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 9999px; padding: 0.15rem; width: fit-content; }
+    .qty-btn { width: 2rem; height: 2rem; border-radius: 50%; color: var(--text-heading); display: flex; align-items: center; justify-content: center; transition: background 0.2s; cursor: pointer; }
+    .qty-btn:hover { background: rgba(200,169,110,0.1); color: var(--accent); }
+    .quantity-pill input { width: 2.5rem; text-align: center; border: none; font-weight: 600; font-size: 1rem; background: transparent; color: var(--text-heading); -moz-appearance: textfield; }
+    .quantity-pill input::-webkit-outer-spin-button, .quantity-pill input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-    @media(min-width: 768px) {
-        .cart-item {
-            grid-template-columns: 5fr 2fr 2fr 1fr;
-            padding: 1.5rem 2rem;
-            gap: 1rem;
-        }
-    }
+    .item-total { font-family: var(--font-body); font-weight: 700; font-size: 1.125rem; color: var(--accent); }
+    @media(min-width: 768px) { .item-total { text-align: right; } }
 
-    .item-product {
-        display: flex;
-        gap: 1.5rem;
-        align-items: center;
-    }
+    .delete-btn { color: var(--text-muted); cursor: pointer; transition: color 0.2s; display: flex; justify-content: flex-end; }
+    .delete-btn:hover { color: #ef4444; }
 
-    .item-image-wrapper {
-        width: 100px;
-        height: 100px;
-        flex-shrink: 0;
-        border-radius: 0.75rem;
-        overflow: hidden;
-        background-color: #f3f4f6;
-        border: 1px solid #eee;
-    }
-
-    .item-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .item-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-    }
-
-    .item-title {
-        font-family: 'Manrope', sans-serif;
-        font-size: 1.125rem;
-        font-weight: 700;
-        color: var(--c-text-main);
-        transition: color 0.2s;
-    }
-
-    .item-title-link:hover .item-title {
-        color: var(--primary);
-    }
-
-    .item-price-single {
-        color: var(--c-text-muted);
-        font-size: 0.9rem;
-    }
-
-    /* Quantity Pill */
-    .quantity-pill {
-        display: inline-flex;
-        align-items: center;
-        background-color: white;
-        border: 1px solid var(--c-border);
-        border-radius: 9999px;
-        padding: 0.25rem;
-        width: fit-content;
-    }
-
-    .qty-btn {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        border: none;
-        background: transparent;
-        color: var(--c-text-main);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.2s;
-        cursor: pointer;
-    }
-    
-    .qty-btn:hover {
-        background-color: #f3f4f6;
-    }
-    
-    .qty-btn span {
-        font-size: 1rem;
-    }
-
-    .quantity-pill input {
-        width: 2.5rem;
-        text-align: center;
-        border: none;
-        font-weight: 600;
-        font-size: 1rem;
-        background: transparent;
-        color: var(--c-text-main);
-        -moz-appearance: textfield;
-    }
-    .quantity-pill input::-webkit-outer-spin-button,
-    .quantity-pill input::-webkit-inner-spin-button {
-         -webkit-appearance: none; margin: 0;
-    }
-
-    .item-total {
-        font-weight: 700;
-        font-size: 1.125rem;
-        color: var(--c-text-main);
-    }
-    
-    @media(min-width: 768px) {
-        .item-total { text-align: right; }
-    }
-
-    .delete-btn {
-        color: #9ca3af;
-        cursor: pointer;
-        transition: color 0.2s;
-        display: flex;
-        justify-content: flex-end;
-    }
-    
-    .delete-btn:hover {
-        color: #ef4444;
-    }
-
-    .cart-footer {
-        padding: 1.5rem 2rem;
-        background-color: #fafafa;
-    }
-
-    .continue-shopping {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        color: var(--c-text-main);
-        font-size: 0.875rem;
-        transition: color 0.2s;
-    }
-    .continue-shopping:hover {
-        color: var(--primary);
-    }
+    .cart-footer { padding: 1.5rem 2rem; background: rgba(0,0,0,0.1); }
+    .continue-shopping { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; color: var(--text-muted); font-size: 0.875rem; transition: color 0.2s; }
+    .continue-shopping:hover { color: var(--accent); }
 
     /* Summary Sidebar */
-    .summary-card {
-        padding: 2rem;
-        border-radius: 1rem;
-        border: 1px solid var(--c-border);
-    }
-
-    .summary-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--c-border);
-    }
-
-    .summary-rows {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .summary-row .label {
-        color: var(--c-text-muted);
-        font-size: 1rem;
-    }
-    
-    .summary-row .value {
-        font-weight: 600;
-        color: var(--c-text-main);
-    }
-    
-    .text-muted { color: #9ca3af !important; font-weight: normal !important; font-size: 0.875rem !important;}
-
-    .divider {
-        height: 1px;
-        background-color: var(--c-border);
-        margin: 1.5rem 0;
-    }
-
-    .summary-row.total .label {
-        color: var(--c-text-main);
-        font-size: 1.25rem;
-        font-weight: 700;
-    }
-    
-    .summary-row.total .value {
-        color: var(--primary);
-        font-size: 1.5rem;
-        font-weight: 800;
-    }
-
-    .btn-lg {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1rem;
-        border-radius: 0.75rem;
-        display: flex;
-        justify-content: center;
-    }
-
-    .trust-badges {
-        margin-top: 2rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .badge-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: var(--c-text-muted);
-        font-size: 0.875rem;
-        background: white;
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        border: 1px solid var(--c-border);
-    }
-    .badge-item span.material-symbols-outlined {
-        color: var(--primary);
-    }
+    .summary-card { padding: 2rem; border-radius: var(--radius-lg); background: var(--bg-card); border: 1px solid var(--border-subtle); backdrop-filter: blur(10px); }
+    .summary-title { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 500; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); color: var(--text-heading); }
+    .summary-rows { display: flex; flex-direction: column; gap: 1rem; }
+    .summary-row { display: flex; justify-content: space-between; align-items: center; }
+    .summary-row .label { color: var(--text-muted); font-size: 0.95rem; }
+    .summary-row .value { font-weight: 600; color: var(--text-heading); }
+    .text-muted { color: var(--text-muted) !important; font-weight: normal !important; font-size: 0.85rem !important; }
+    .divider { height: 1px; background-color: var(--border-subtle); margin: 1.5rem 0; }
+    .summary-row.total .label { color: var(--text-heading); font-size: 1.25rem; font-weight: 600; }
+    .summary-row.total .value { color: var(--accent); font-size: 1.5rem; font-weight: 700; }
 
     /* Empty State */
-    .empty-cart-state {
-        text-align: center;
-        padding: 6rem 1rem;
-        max-width: 500px;
-        margin: 0 auto;
-    }
+    .empty-cart-state { text-align: center; padding: 6rem 1rem; max-width: 500px; margin: 0 auto; background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
+    .empty-icon-wrapper { width: 80px; height: 80px; background: rgba(200,169,110,0.1); border: 1px solid var(--border-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem auto; color: var(--accent); }
+    .empty-icon-wrapper span { font-size: 2.5rem; }
+    .empty-title { font-family: var(--font-heading); font-size: 2rem; font-weight: 500; margin-bottom: 1rem; color: var(--text-heading); }
+    .empty-text { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 1rem; line-height: 1.6; }
 
-    .empty-icon-wrapper {
-        width: 100px;
-        height: 100px;
-        background-color: #f3f4f6;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 2rem auto;
-        color: #9ca3af;
-    }
-
-    .empty-icon-wrapper span {
-        font-size: 3rem;
-    }
-
-    .empty-title {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 1rem;
-        color: var(--c-text-main);
-    }
-
-    .empty-text {
-        color: var(--c-text-muted);
-        margin-bottom: 2.5rem;
-        font-size: 1.125rem;
-        line-height: 1.6;
-    }
-
-    /* Responsive adjustments */
     @media (max-width: 767px) {
-        .header-group .section-title { font-size: 2rem !important; }
         .cart-item { text-align: left; }
-        .item-image-wrapper { width: 80px; height: 80px; }
         .item-quantity { margin-top: 1rem; }
         .item-total { margin-top: 0.5rem; }
         .item-actions { position: absolute; top: 1rem; right: 1rem; }
-        .delete-btn { width: 2rem; height: 2rem; background: #f3f4f6; border-radius: 50%; align-items: center; justify-content: center; }
+        .delete-btn { width: 2rem; height: 2rem; background: rgba(255,255,255,0.05); border-radius: 50%; align-items: center; justify-content: center; }
     }
 </style>
 @endsection
@@ -478,24 +197,13 @@
     function updateQty(itemId, change) {
         const input = document.getElementById('qty-' + itemId);
         let newQty = parseInt(input.value) + change;
-        
         if (newQty < 1) return;
-        
         input.value = newQty;
-
         fetch('{{ route("cart.update") }}', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                item_id: itemId,
-                quantity: newQty
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+            body: JSON.stringify({ item_id: itemId, quantity: newQty })
+        }).then(r => r.json()).then(data => {
             if(data.success) {
                 document.getElementById('total-' + itemId).innerText = '₹' + data.item_total;
                 document.getElementById('cart-subtotal').innerText = '₹' + data.subtotal;
@@ -505,349 +213,3 @@
     }
 </script>
 @endsection
-
-<style>
-    /* Styling Variables locally to ensure premium feel */
-    :root {
-        --c-border: #e5e7eb;
-        --c-text-main: #1f2937;
-        --c-text-muted: #6b7280;
-        --c-bg-light: #f9fafb;
-    }
-
-    .bg-light { background-color: #f8f8f6; } /* Custom soft sand color */
-    .bg-white { background-color: #ffffff; }
-    .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-    
-    .cart-layout {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        align-items: start;
-    }
-    
-    @media(min-width: 1024px) {
-        .cart-layout {
-            grid-template-columns: 2.2fr 1fr;
-            gap: 2rem;
-        }
-    }
-
-    /* Cart Container */
-    .cart-container {
-        border-radius: 0.75rem;
-        border: 1px solid var(--c-border);
-        overflow: hidden;
-    }
-
-    .cart-header {
-        display: none; /* Hidden on mobile */
-        grid-template-columns: 5fr 2fr 2fr 1fr; /* Adjusted ratios */
-        padding: 1rem 1.5rem;
-        background-color: #fafafa;
-        border-bottom: 1px solid var(--c-border);
-        font-weight: 600;
-        color: var(--c-text-muted);
-        text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.05em;
-    }
-    
-    @media(min-width: 768px) {
-        .cart-header { display: grid; }
-    }
-
-    .cart-item {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid var(--c-border);
-        align-items: center;
-        position: relative;
-    }
-
-    @media(min-width: 768px) {
-        .cart-item {
-            grid-template-columns: 5fr 2fr 2fr 1fr;
-            gap: 1rem;
-        }
-    }
-
-    .item-product {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    .item-image-wrapper {
-        width: 70px;
-        height: 70px;
-        flex-shrink: 0;
-        border-radius: 0.5rem;
-        overflow: hidden;
-        background-color: #f3f4f6;
-        border: 1px solid #eee;
-    }
-
-    .item-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .item-details {
-        display: flex;
-        flex-direction: column;
-        gap: 0.2rem;
-    }
-
-    .item-title {
-        font-family: 'Manrope', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: var(--c-text-main);
-        transition: color 0.2s;
-        line-height: 1.3;
-    }
-
-    .item-title-link:hover .item-title {
-        color: var(--primary);
-    }
-
-    .item-price-single {
-        color: var(--c-text-muted);
-        font-size: 0.85rem;
-    }
-
-    /* Quantity Pill */
-    .quantity-pill {
-        display: inline-flex;
-        align-items: center;
-        background-color: white;
-        border: 1px solid var(--c-border);
-        border-radius: 9999px;
-        padding: 0.15rem;
-        width: fit-content;
-    }
-
-    .qty-btn {
-        width: 1.75rem;
-        height: 1.75rem;
-        border-radius: 50%;
-        border: none;
-        background: transparent;
-        color: var(--c-text-main);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.2s;
-        cursor: pointer;
-    }
-    
-    .qty-btn:hover {
-        background-color: #f3f4f6;
-    }
-    
-    .qty-btn span {
-        font-size: 0.9rem;
-    }
-
-    .quantity-pill input {
-        width: 2rem;
-        text-align: center;
-        border: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        background: transparent;
-        color: var(--c-text-main);
-        -moz-appearance: textfield;
-    }
-    .quantity-pill input::-webkit-outer-spin-button,
-    .quantity-pill input::-webkit-inner-spin-button {
-         -webkit-appearance: none; margin: 0;
-    }
-
-    .item-total {
-        font-weight: 700;
-        font-size: 1rem;
-        color: var(--c-text-main);
-    }
-    
-    @media(min-width: 768px) {
-        .item-total { text-align: right; }
-    }
-
-    .delete-btn {
-        color: #9ca3af;
-        cursor: pointer;
-        transition: color 0.2s;
-        display: flex;
-        justify-content: flex-end;
-    }
-    
-    .delete-btn:hover {
-        color: #ef4444;
-    }
-    
-    .delete-btn span { font-size: 1.25rem; }
-
-    .cart-footer {
-        padding: 1rem 1.5rem;
-        background-color: #fafafa;
-    }
-
-    .continue-shopping {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 600;
-        color: var(--c-text-main);
-        font-size: 0.85rem;
-        transition: color 0.2s;
-    }
-    .continue-shopping:hover {
-        color: var(--primary);
-    }
-
-    /* Summary Sidebar */
-    .summary-card {
-        padding: 1.5rem;
-        border-radius: 0.75rem;
-        border: 1px solid var(--c-border);
-    }
-
-    .summary-title {
-        font-size: 1.125rem;
-        font-weight: 700;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid var(--c-border);
-    }
-
-    .summary-rows {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-bottom: 1.25rem;
-    }
-
-    .summary-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .summary-row .label {
-        color: var(--c-text-muted);
-        font-size: 0.9rem;
-    }
-    
-    .summary-row .value {
-        font-weight: 600;
-        color: var(--c-text-main);
-        font-size: 0.95rem;
-    }
-    
-    .text-muted { color: #9ca3af !important; font-weight: normal !important; font-size: 0.8rem !important;}
-
-    .divider {
-        height: 1px;
-        background-color: var(--c-border);
-        margin: 1rem 0;
-    }
-
-    .summary-row.total .label {
-        color: var(--c-text-main);
-        font-size: 1.125rem;
-        font-weight: 700;
-    }
-    
-    .summary-row.total .value {
-        color: var(--primary);
-        font-size: 1.25rem;
-        font-weight: 800;
-    }
-
-    .btn-lg {
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 0.95rem;
-        border-radius: 0.5rem;
-        display: flex;
-        justify-content: center;
-    }
-
-    .trust-badges {
-        margin-top: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .badge-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: var(--c-text-muted);
-        font-size: 0.8rem;
-        background: white;
-        padding: 0.625rem;
-        border-radius: 0.375rem;
-        border: 1px solid var(--c-border);
-    }
-    .badge-item span.material-symbols-outlined {
-        color: var(--primary);
-        font-size: 1.125rem;
-    }
-
-    /* Empty State */
-    .empty-cart-state {
-        text-align: center;
-        padding: 4rem 1rem;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .empty-icon-wrapper {
-        width: 80px;
-        height: 80px;
-        background-color: #f3f4f6;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem auto;
-        color: #9ca3af;
-    }
-
-    .empty-icon-wrapper span {
-        font-size: 2.5rem;
-    }
-
-    .empty-title {
-        font-size: 1.75rem;
-        font-weight: 800;
-        margin-bottom: 0.75rem;
-        color: var(--c-text-main);
-    }
-
-    .empty-text {
-        color: var(--c-text-muted);
-        margin-bottom: 2rem;
-        font-size: 1rem;
-        line-height: 1.5;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 767px) {
-        .header-group .section-title { font-size: 1.75rem !important; }
-        .cart-item { text-align: left; }
-        .item-image-wrapper { width: 60px; height: 60px; }
-        .item-quantity { margin-top: 0.75rem; }
-        .item-total { margin-top: 0.5rem; font-size: 0.95rem; }
-        .item-actions { position: absolute; top: 1rem; right: 1rem; }
-        .delete-btn { width: 1.75rem; height: 1.75rem; background: #f3f4f6; border-radius: 50%; align-items: center; justify-content: center; }
-        .delete-btn span { font-size: 1rem; }
-    }
-</style>

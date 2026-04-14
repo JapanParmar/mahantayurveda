@@ -3,13 +3,12 @@
 @section('title', 'Shop All')
 
 @section('content')
-<section class="section bg-sand">
+<section class="section" style="padding-top: 2rem;">
     <div class="container">
-        <div class="section-header" style="text-align: center; justify-content: center; margin-bottom: 4rem;">
-            <div>
-                <h1 class="section-title">Our Collection</h1>
-                <p class="card-text">Purity and potency in every drop.</p>
-            </div>
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <span class="section-label" style="justify-content: center;">Our Products</span>
+            <h1 class="section-title" style="text-align: center;">Our <em>Collection</em></h1>
+            <p class="section-text" style="margin: 0 auto;">Purity and potency in every drop.</p>
         </div>
 
         <div class="grid-3">
@@ -27,7 +26,7 @@
                             <h3 class="product-title">{{ $product->name }}</h3>
                             @if($product->rating)
                             <div class="rating">
-                                <span class="material-symbols-outlined" style="font-size: 1rem;">star</span> {{ $product->rating }}
+                                <span class="material-symbols-outlined" style="font-size: 0.875rem;">star</span> {{ $product->rating }}
                             </div>
                             @endif
                         </div>
@@ -43,7 +42,7 @@
                                 @endif
                             </div>
                             <button class="btn-icon">
-                                <span class="material-symbols-outlined">add_shopping_cart</span>
+                                <span class="material-symbols-outlined" style="font-size: 1.125rem;">add_shopping_cart</span>
                             </button>
                         </div>
                     </div>
@@ -51,28 +50,10 @@
             </div>
             @empty
             <div style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
-                <p>No products found. Please come back later.</p>
+                <p style="color: var(--text-muted);">No products found. Please come back later.</p>
             </div>
             @endforelse
         </div>
     </div>
 </section>
-
-<style>
-    .grid-3 {
-        display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 2rem;
-    }
-    @media(min-width: 768px) {
-        .grid-3 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-    @media(min-width: 1024px) {
-        .grid-3 {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-</style>
 @endsection
